@@ -7,6 +7,7 @@ export default defineConfig({
   plugins: [react()],
   preview: {
     host: true,
-    port: 4173
+    port: 4173,
+    allowedHosts: ['zerodha-frontend-9dz2.onrender.com']
   }
 });
