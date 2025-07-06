@@ -12,7 +12,7 @@ const BuyActionWindow = ({ uid }) => {
 
   const handleBuyClick = async () => {
     try {
-      await axios.post("https://Zerodha-backend.onrender.com/order/newOrders", {
+      await axios.post("https://zerodha-backend-axjb.onrender.com/order/newOrders", {
         name: uid,
         qty: stockQuantity,
         price: stockPrice,
@@ -35,7 +35,7 @@ const BuyActionWindow = ({ uid }) => {
       const dayChange = 0.0;
       const isLoss = false;
 
-      await axios.post("https://Zerodha-backend.onrender.com/holding/newHoldings", {
+      await axios.post("https://zerodha-backend-axjb.onrender.com/holding/newHoldings", {
         name: uid,
         qty: stockQuantity,
         avg: avgCost,

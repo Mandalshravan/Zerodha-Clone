@@ -27,7 +27,7 @@ export default function AccountMenu() {
 
   useEffect(() => {
     axios
-      .get("https://Zerodha-backend.onrender.com/auth/verify", { withCredentials: true })
+      .get("https://zerodha-backend-axjb.onrender.com/auth/verify", { withCredentials: true })
       .then((res) => {
         if (res.data.status) {
           setUsername(res.data.user); //  Set the username
@@ -42,7 +42,7 @@ export default function AccountMenu() {
 
   const handleLogout = () => {
     removeCookie("token");
-    window.location.href = "https://Zerodha-frontend.onrender.com/login";
+    window.location.href = "https://zerodha-frontend-9dz2.onrender.com//login";
   };
   return (
     <React.Fragment>

@@ -34,7 +34,7 @@ const SignupForm = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "https://Zerodha-backend.onrender.com/auth/signup",
+        "https://zerodha-backend-axjb.onrender.com/auth/signup",
         {
           ...inputValue,
         },
@@ -44,7 +44,7 @@ const SignupForm = () => {
       if (success) {
         handleSuccess(message);
         setTimeout(() => {
-          window.location.href = "https://Zerodha-dashboard.onrender.com/dashboard";
+          window.location.href = "https://zerodha-dashboard-8j1e.onrender.com/dashboard";
         }, 1000);
       } else {
         handleError(message);

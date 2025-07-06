@@ -16,7 +16,7 @@ const positionsRoute = require("./routes/PositionRoute");
 const app = express();
 app.use(
   cors({
-    origin: ["https://Zerodha-frontend.onrender.com", "https://Zerodha-dashboard.onrender.com"],
+    origin: ["https://zerodha-frontend-9dz2.onrender.com/", "https://zerodha-dashboard-8j1e.onrender.com"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })

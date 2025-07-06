@@ -2,7 +2,7 @@
 
 Zerodha is a modern, responsive, and feature-rich full-stack trading platform built using the MERN Stack (MongoDB, Express.js, React.js, Node.js). It provides users with a smooth experience for viewing, managing, and analyzing stocks in real-time.
 
-🚀 **Live Demo:** [Click here to visit Zerodha](https://Zerodha-frontend.onrender.com)
+🚀 **Live Demo:** [Click here to visit Zerodha](https://zerodha-frontend-9dz2.onrender.com/)
 
 ---
 

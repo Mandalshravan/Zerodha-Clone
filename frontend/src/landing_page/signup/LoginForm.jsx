@@ -34,7 +34,7 @@ const Login = () => {
 
     try {
       const data = await axios.post(
-        "https://Zerodha-backend.onrender.com/auth/login",
+        "https://zerodha-backend-axjb.onrender.com/auth/login",
         {
           ...formdata,
         },
@@ -45,7 +45,7 @@ const Login = () => {
       if (success) {
         handleSuccess(message);
         setTimeout(() => {
-          window.location.href = "https://Zerodha-dashboard.onrender.com/dashboard";
+          window.location.href = "https://zerodha-dashboard-8j1e.onrender.com/dashboard";
         }, 2000);
       } else {
         handleError(message);
