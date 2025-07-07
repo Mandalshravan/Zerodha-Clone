@@ -22,26 +22,29 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const response = await axios.post(
         "https://zerodha-backend-axjb.onrender.com/api/auth/login",
-        { ...formdata },
-        { withCredentials: true }
+        { ...formdata }
       );
-      const data = response.data;
-      console.log(data);
 
-      if (data.message === "Login successful") {
-        handleSuccess(data.message);
+      console.log(response.data);
+
+      if (response.data.message === "Login successful") {
+        // ✅ Save token in localStorage
+        localStorage.setItem("token", response.data.token);
+
+        handleSuccess(response.data.message);
+
         setTimeout(() => {
-          window.location.href =
-            "https://zerodha-dashboard-8j1e.onrender.com/dashboard";
+          window.location.href = "https://zerodha-frontend-9dz2.onrender.com/dashboard";
         }, 2000);
       } else {
-        handleError(data.message || "Login failed");
+        handleError(response.data.message || "Login failed");
       }
     } catch (err) {
-      console.error(err);
+      console.log(err);
       handleError("Something went wrong. Please try again.");
     }
 
@@ -82,6 +85,7 @@ const Login = () => {
           >
             Login
           </Button>
+
           <span style={{ marginTop: "1rem", display: "block" }}>
             Don't have an account? <Link to="/signup">Sign Up</Link>
           </span>
