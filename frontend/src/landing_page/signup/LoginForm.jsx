@@ -35,7 +35,7 @@ const Login = () => {
         handleSuccess(data.message);
         setTimeout(() => {
           window.location.href =
-            "https://zerodha-frontend-9dz2.onrender.com/dashboard";
+            "https://onestock-dashboard.onrender.com/dashboard";
         }, 2000);
       } else {
         handleError(data.message || "Login failed");
