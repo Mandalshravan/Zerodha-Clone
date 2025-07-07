@@ -1,4 +1,5 @@
 import "./App.css";
+import Dashboard from "./landing_page/dashboard/Dashboard.jsx";
 import HomePage from "./landing_page/home/HomePage.jsx";
 import SignupForm from "./landing_page/signup/SignupForm.jsx";
 import LoginForm from "./landing_page/signup/LoginForm.jsx";
@@ -19,6 +20,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/login" element={<LoginForm />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/about" element={<About />} />
         <Route path="/products" element={<Product />} />
         <Route path="/pricing" element={<Pricing />} />
