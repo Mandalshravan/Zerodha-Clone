@@ -12,7 +12,9 @@ const SignupForm = () => {
     password: "",
     username: "",
   });
+
   const { email, password, username } = inputValue;
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setInputValue({
@@ -25,6 +27,7 @@ const SignupForm = () => {
     toast.error(err, {
       position: "bottom-left",
     });
+
   const handleSuccess = (msg) =>
     toast.success(msg, {
       position: "bottom-right",
@@ -34,26 +37,28 @@ const SignupForm = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-         "https://zerodha-backend-axjb.onrender.com/api/auth/signup",
+        "https://zerodha-backend-axjb.onrender.com/api/auth/signup",
         {
           ...inputValue,
         },
         { withCredentials: true }
       );
-      const { success, message } = data;
-      if (success) {
-        handleSuccess(message);
+
+      // ✅ Check backend message
+      if (data.message === "User registered successfully") {
+        handleSuccess(data.message);
         setTimeout(() => {
           window.location.href = "https://zerodha-frontend-9dz2.onrender.com/dashboard";
         }, 1000);
       } else {
-        handleError(message);
+        handleError(data.message || "Signup failed");
       }
     } catch (error) {
       console.log(error);
+      handleError("Something went wrong. Please try again.");
     }
+
     setInputValue({
-      ...inputValue,
       email: "",
       password: "",
       username: "",
@@ -68,6 +73,7 @@ const SignupForm = () => {
           <div className="col-8">
             <img
               src="/media/images/account_open.svg"
+              alt="Signup Visual"
               style={{ width: "600px" }}
             />
           </div>
@@ -77,30 +83,33 @@ const SignupForm = () => {
               <form onSubmit={handleSubmit}>
                 <TextField
                   type="email"
-                  label="email"
+                  label="Email"
                   name="email"
                   value={email}
                   onChange={handleOnChange}
                   fullWidth
                   margin="normal"
+                  required
                 />
                 <TextField
                   type="text"
-                  label="username"
+                  label="Username"
                   name="username"
                   value={username}
                   onChange={handleOnChange}
                   fullWidth
                   margin="normal"
+                  required
                 />
                 <TextField
                   type="password"
-                  label="password"
+                  label="Password"
                   name="password"
                   value={password}
                   onChange={handleOnChange}
                   fullWidth
                   margin="normal"
+                  required
                 />
                 <Button
                   type="submit"
@@ -113,7 +122,7 @@ const SignupForm = () => {
                 </Button>
 
                 <span style={{ marginTop: "1rem", display: "block" }}>
-                  Already have an account? <Link to={"/login"}>Login</Link>
+                  Already have an account? <Link to="/login">Login</Link>
                 </span>
               </form>
             </Paper>

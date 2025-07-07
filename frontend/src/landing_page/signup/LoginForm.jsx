@@ -6,61 +6,46 @@ import { TextField, Button, Box, Paper } from "@mui/material";
 import "./LoginForm.css";
 
 const Login = () => {
-  const [formdata, setFormdata] = useState({
-    email: "",
-    password: "",
-  });
-
+  const [formdata, setFormdata] = useState({ email: "", password: "" });
   const { email, password } = formdata;
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    setFormdata({
-      ...formdata,
-      [name]: value,
-    });
+    setFormdata({ ...formdata, [name]: value });
   };
 
   const handleError = (err) =>
-    toast.error(err, {
-      position: "bottom-left",
-    });
+    toast.error(err, { position: "bottom-left" });
 
   const handleSuccess = (msg) =>
-    toast.success(msg, {
-      position: "bottom-left",
-    });
+    toast.success(msg, { position: "bottom-left" });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const response = await axios.post(
         "https://zerodha-backend-axjb.onrender.com/api/auth/login",
         { ...formdata },
         { withCredentials: true }
       );
+      const data = response.data;
+      console.log(data);
 
-      console.log(response.data);
-
-      // ✅ Fix: Check message directly instead of "success"
-      if (response.data.message === "Login successful") {
-        handleSuccess(response.data.message);
+      if (data.message === "Login successful") {
+        handleSuccess(data.message);
         setTimeout(() => {
-          window.location.href = window.location.href = "https://zerodha-frontend-9dz2.onrender.com/dashboard";;
+          window.location.href =
+            "https://zerodha-frontend-9dz2.onrender.com/dashboard";
         }, 2000);
       } else {
-        handleError(response.data.message || "Login failed");
+        handleError(data.message || "Login failed");
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
       handleError("Something went wrong. Please try again.");
     }
 
-    setFormdata({
-      email: "",
-      password: "",
-    });
+    setFormdata({ email: "", password: "" });
   };
 
   return (
@@ -97,7 +82,6 @@ const Login = () => {
           >
             Login
           </Button>
-
           <span style={{ marginTop: "1rem", display: "block" }}>
             Don't have an account? <Link to="/signup">Sign Up</Link>
           </span>
