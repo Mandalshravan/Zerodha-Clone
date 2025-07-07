@@ -48,7 +48,7 @@ const SignupForm = () => {
       if (data.message === "User registered successfully") {
         handleSuccess(data.message);
         setTimeout(() => {
-          window.location.href = "https://onestock-dashboard.onrender.com/dashboard";
+          window.location.href = "https://zerodha-dashboard-8j1e.onrender.com/dashboard";
         }, 1000);
       } else {
         handleError(data.message || "Signup failed");
