@@ -9,31 +9,20 @@ const Home = () => {
 
   useEffect(() => {
     const verifyToken = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        window.location.href = "https://zerodha-frontend-9dz2.onrender.com/login";
-        return;
-      }
-
       try {
-        const { data } = await axios.get(
-          "https://zerodha-backend-axjb.onrender.com/api/auth/verify",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const { data } = await axios.get("https://zerodha-backend-axjb.onrender.com/auth/verify", {
+          withCredentials: true, //  Send cookies
+        });
 
         if (data.status) {
           setUsername(data.user);
-          toast(`Hello ${data.user}`);
+          toast(`Hello ${data.user}`, {
+            position: "top-right",
+          });
         } else {
-          localStorage.removeItem("token");
           window.location.href = "https://zerodha-frontend-9dz2.onrender.com/login";
         }
       } catch (err) {
-        localStorage.removeItem("token");
         window.location.href = "https://zerodha-frontend-9dz2.onrender.com/login";
       }
     };
