@@ -12,9 +12,7 @@ const SignupForm = () => {
     password: "",
     username: "",
   });
-
   const { email, password, username } = inputValue;
-
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setInputValue({
@@ -27,7 +25,6 @@ const SignupForm = () => {
     toast.error(err, {
       position: "bottom-left",
     });
-
   const handleSuccess = (msg) =>
     toast.success(msg, {
       position: "bottom-right",
@@ -43,22 +40,20 @@ const SignupForm = () => {
         },
         { withCredentials: true }
       );
-
-      // ✅ Check backend message
-      if (data.message === "User registered successfully") {
-        handleSuccess(data.message);
+      const { success, message } = data;
+      if (success) {
+        handleSuccess(message);
         setTimeout(() => {
           window.location.href = "https://zerodha-dashboard-8j1e.onrender.com/dashboard";
         }, 1000);
       } else {
-        handleError(data.message || "Signup failed");
+        handleError(message);
       }
     } catch (error) {
       console.log(error);
-      handleError("Something went wrong. Please try again.");
     }
-
     setInputValue({
+      ...inputValue,
       email: "",
       password: "",
       username: "",
@@ -73,7 +68,6 @@ const SignupForm = () => {
           <div className="col-8">
             <img
               src="/media/images/account_open.svg"
-              alt="Signup Visual"
               style={{ width: "600px" }}
             />
           </div>
@@ -83,33 +77,30 @@ const SignupForm = () => {
               <form onSubmit={handleSubmit}>
                 <TextField
                   type="email"
-                  label="Email"
+                  label="email"
                   name="email"
                   value={email}
                   onChange={handleOnChange}
                   fullWidth
                   margin="normal"
-                  required
                 />
                 <TextField
                   type="text"
-                  label="Username"
+                  label="username"
                   name="username"
                   value={username}
                   onChange={handleOnChange}
                   fullWidth
                   margin="normal"
-                  required
                 />
                 <TextField
                   type="password"
-                  label="Password"
+                  label="password"
                   name="password"
                   value={password}
                   onChange={handleOnChange}
                   fullWidth
                   margin="normal"
-                  required
                 />
                 <Button
                   type="submit"
@@ -122,7 +113,7 @@ const SignupForm = () => {
                 </Button>
 
                 <span style={{ marginTop: "1rem", display: "block" }}>
-                  Already have an account? <Link to="/login">Login</Link>
+                  Already have an account? <Link to={"/login"}>Login</Link>
                 </span>
               </form>
             </Paper>

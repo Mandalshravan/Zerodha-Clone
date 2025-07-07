@@ -3,42 +3,60 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { TextField, Button, Box, Paper } from "@mui/material";
+
 import "./LoginForm.css";
 
 const Login = () => {
-  const [formdata, setFormdata] = useState({ email: "", password: "" });
-
+  const [formdata, setFormdata] = useState({
+    email: "",
+    password: "",
+  });
+  const { email, password } = formdata;
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    setFormdata({ ...formdata, [name]: value });
+    setFormdata({
+      ...formdata,
+      [name]: value,
+    });
   };
 
-  const handleError = (err) => toast.error(err, { position: "bottom-left" });
-  const handleSuccess = (msg) => toast.success(msg, { position: "bottom-left" });
+  const handleError = (err) =>
+    toast.error(err, {
+      position: "bottom-left",
+    });
+  const handleSuccess = (msg) =>
+    toast.success(msg, {
+      position: "bottom-left",
+    });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post(
-        "https://zerodha-backend-axjb.onrender.com/api/auth/login",
-        formdata
-      );
-      const { message, token } = response.data;
 
-      if (message === "Login successful" && token) {
-        localStorage.setItem("token", token);
+    try {
+      const data = await axios.post(
+        "https://zerodha-backend-axjb.onrender.com/api/auth/login",
+        {
+          ...formdata,
+        },
+        { withCredentials: true }
+      );
+      console.log(data);
+      const { success, message } = data.data;
+      if (success) {
         handleSuccess(message);
         setTimeout(() => {
           window.location.href = "https://zerodha-dashboard-8j1e.onrender.com/dashboard";
-        }, 1000);
+        }, 2000);
       } else {
-        handleError("Login failed. Try again.");
+        handleError(message);
       }
     } catch (err) {
-      handleError("Something went wrong. Try again.");
+      console.log(err);
     }
-
-    setFormdata({ email: "", password: "" });
+    setFormdata({
+      email: "",
+      password: "",
+    });
   };
 
   return (
@@ -48,29 +66,34 @@ const Login = () => {
         <form onSubmit={handleSubmit}>
           <TextField
             type="email"
-            label="Email"
+            label="email"
             name="email"
-            value={formdata.email}
+            value={email}
             onChange={handleOnChange}
             fullWidth
             margin="normal"
-            required
           />
           <TextField
             type="password"
-            label="Password"
+            label="password"
             name="password"
-            value={formdata.password}
+            value={password}
             onChange={handleOnChange}
             fullWidth
             margin="normal"
-            required
           />
-          <Button type="submit" variant="contained" color="primary" fullWidth style={{ marginTop: "1rem" }}>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            style={{ marginTop: "1rem" }}
+          >
             Login
           </Button>
+
           <span style={{ marginTop: "1rem", display: "block" }}>
-            Don’t have an account? <Link to="/signup">Signup</Link>
+            Don't have an account? <Link to={"/signup"}>SignUp</Link>
           </span>
         </form>
       </Paper>
