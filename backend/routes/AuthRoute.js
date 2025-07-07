@@ -1,11 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { signup, login } = require("../controllers/AuthController");
-const { userverification } = require("../middlewares/Authmiddleware");
+const authController = require("../controllers/AuthController");
 
-// Auth routes
-router.post("/signup", signup);
-router.post("/login", login);
-router.get("/verify", userverification);
+// ✅ Do NOT call the function with (), just pass the function reference
+router.post("/signup", authController.signup); // ✅
+router.post("/login", authController.login);   // ✅
+router.get("/verify", authController.verify);  // ✅
 
 module.exports = router;
