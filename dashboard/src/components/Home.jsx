@@ -11,7 +11,7 @@ const Home = () => {
     const verifyToken = async () => {
       const token = localStorage.getItem("token"); // ✅ Get token from localStorage
       if (!token) {
-        window.location.href = "https://zerodha-frontend-9dz2.onrender.com/login";
+        window.location.href = "/login"; // ✅ dynamic
         return;
       }
 
@@ -20,7 +20,7 @@ const Home = () => {
           "https://zerodha-backend-axjb.onrender.com/api/auth/verify",
           {
             headers: {
-              Authorization: `Bearer ${token}`, // ✅ Pass token in header
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -31,12 +31,12 @@ const Home = () => {
             position: "top-right",
           });
         } else {
-          localStorage.removeItem("token"); // optional cleanup
-          window.location.href = "https://zerodha-frontend-9dz2.onrender.com/login";
+          localStorage.removeItem("token");
+          window.location.href = "/login"; // ✅ dynamic
         }
       } catch (err) {
-        localStorage.removeItem("token"); // optional cleanup
-        window.location.href = "https://zerodha-frontend-9dz2.onrender.com/login";
+        localStorage.removeItem("token");
+        window.location.href = "/login"; // ✅ dynamic
       }
     };
 
