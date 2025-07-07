@@ -34,7 +34,7 @@ const SignupForm = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "https://zerodha-backend-axjb.onrender.com/auth/signup",
+         "https://zerodha-backend-axjb.onrender.com/api/auth/signup",
         {
           ...inputValue,
         },
