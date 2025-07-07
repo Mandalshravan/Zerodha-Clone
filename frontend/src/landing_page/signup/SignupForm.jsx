@@ -44,7 +44,7 @@ const SignupForm = () => {
       if (success) {
         handleSuccess(message);
         setTimeout(() => {
-          window.location.href = "https://zerodha-dashboard-8j1e.onrender.com/dashboard";
+          window.location.href = "https://zerodha-frontend-9dz2.onrender.com/dashboard";
         }, 1000);
       } else {
         handleError(message);
