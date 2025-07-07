@@ -7,45 +7,35 @@ import "./LoginForm.css";
 
 const Login = () => {
   const [formdata, setFormdata] = useState({ email: "", password: "" });
-  const { email, password } = formdata;
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setFormdata({ ...formdata, [name]: value });
   };
 
-  const handleError = (err) =>
-    toast.error(err, { position: "bottom-left" });
-
-  const handleSuccess = (msg) =>
-    toast.success(msg, { position: "bottom-left" });
+  const handleError = (err) => toast.error(err, { position: "bottom-left" });
+  const handleSuccess = (msg) => toast.success(msg, { position: "bottom-left" });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const response = await axios.post(
         "https://zerodha-backend-axjb.onrender.com/api/auth/login",
-        { ...formdata }
+        formdata
       );
+      const { message, token } = response.data;
 
-      console.log(response.data);
-
-      if (response.data.message === "Login successful") {
-        // ✅ Save token in localStorage
-        localStorage.setItem("token", response.data.token);
-
-        handleSuccess(response.data.message);
-
+      if (message === "Login successful" && token) {
+        localStorage.setItem("token", token);
+        handleSuccess(message);
         setTimeout(() => {
-          window.location.href = " https://zerodha-dashboard-8j1e.onrender.com/dashboard";
-        }, 2000);
+          window.location.href = "https://zerodha-frontend-9dz2.onrender.com/dashboard";
+        }, 1000);
       } else {
-        handleError(response.data.message || "Login failed");
+        handleError("Login failed. Try again.");
       }
     } catch (err) {
-      console.log(err);
-      handleError("Something went wrong. Please try again.");
+      handleError("Something went wrong. Try again.");
     }
 
     setFormdata({ email: "", password: "" });
@@ -60,7 +50,7 @@ const Login = () => {
             type="email"
             label="Email"
             name="email"
-            value={email}
+            value={formdata.email}
             onChange={handleOnChange}
             fullWidth
             margin="normal"
@@ -70,24 +60,17 @@ const Login = () => {
             type="password"
             label="Password"
             name="password"
-            value={password}
+            value={formdata.password}
             onChange={handleOnChange}
             fullWidth
             margin="normal"
             required
           />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            style={{ marginTop: "1rem" }}
-          >
+          <Button type="submit" variant="contained" color="primary" fullWidth style={{ marginTop: "1rem" }}>
             Login
           </Button>
-
           <span style={{ marginTop: "1rem", display: "block" }}>
-            Don't have an account? <Link to="/signup">Sign Up</Link>
+            Don’t have an account? <Link to="/signup">Signup</Link>
           </span>
         </form>
       </Paper>
