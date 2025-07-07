@@ -20,10 +20,10 @@ const Home = () => {
             position: "top-right",
           });
         } else {
-          window.location.href = "https://zerodha-frontend-9dz2.onrender.com//login";
+          window.location.href = "https://zerodha-frontend-9dz2.onrender.com/login";
         }
       } catch (err) {
-        window.location.href = "https://zerodha-frontend-9dz2.onrender.com//login";
+        window.location.href = "https://zerodha-frontend-9dz2.onrender.com/login";
       }
     };
 
