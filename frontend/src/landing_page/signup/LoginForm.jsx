@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { TextField, Button, Box, Paper } from "@mui/material";
-
 import "./LoginForm.css";
 
 const Login = () => {
@@ -11,7 +10,9 @@ const Login = () => {
     email: "",
     password: "",
   });
+
   const { email, password } = formdata;
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setFormdata({
@@ -24,6 +25,7 @@ const Login = () => {
     toast.error(err, {
       position: "bottom-left",
     });
+
   const handleSuccess = (msg) =>
     toast.success(msg, {
       position: "bottom-left",
@@ -33,26 +35,28 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const data = await axios.post(
+      const response = await axios.post(
         "https://zerodha-backend-axjb.onrender.com/api/auth/login",
-        {
-          ...formdata,
-        },
+        { ...formdata },
         { withCredentials: true }
       );
-      console.log(data);
-      const { success, message } = data.data;
-      if (success) {
-        handleSuccess(message);
+
+      console.log(response.data);
+
+      // ✅ Fix: Check message directly instead of "success"
+      if (response.data.message === "Login successful") {
+        handleSuccess(response.data.message);
         setTimeout(() => {
           window.location.href = "https://zerodha-dashboard-8j1e.onrender.com/dashboard";
         }, 2000);
       } else {
-        handleError(message);
+        handleError(response.data.message || "Login failed");
       }
     } catch (err) {
       console.log(err);
+      handleError("Something went wrong. Please try again.");
     }
+
     setFormdata({
       email: "",
       password: "",
@@ -66,21 +70,23 @@ const Login = () => {
         <form onSubmit={handleSubmit}>
           <TextField
             type="email"
-            label="email"
+            label="Email"
             name="email"
             value={email}
             onChange={handleOnChange}
             fullWidth
             margin="normal"
+            required
           />
           <TextField
             type="password"
-            label="password"
+            label="Password"
             name="password"
             value={password}
             onChange={handleOnChange}
             fullWidth
             margin="normal"
+            required
           />
           <Button
             type="submit"
@@ -93,7 +99,7 @@ const Login = () => {
           </Button>
 
           <span style={{ marginTop: "1rem", display: "block" }}>
-            Don't have an account? <Link to={"/signup"}>SignUp</Link>
+            Don't have an account? <Link to="/signup">Sign Up</Link>
           </span>
         </form>
       </Paper>
