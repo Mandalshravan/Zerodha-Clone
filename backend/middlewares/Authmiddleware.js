@@ -3,12 +3,13 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
 module.exports.userverification = async (req, res) => {
-  const token = req.cookies.token;
+  const token = req.headers.authorization?.split(" ")[1]; // Get token from header
+
   if (!token) {
     return res.json({ status: false });
   }
 
-  jwt.verify(token, process.env.TOKEN_KEY, async (err, data) => {
+  jwt.verify(token, process.env.JWT_SECRET, async (err, data) => {
     if (err) {
       return res.json({ status: false });
     }

@@ -1,64 +1,62 @@
 const User = require("../models/UserModel");
 const bcrypt = require("bcryptjs");
-const { createSecretToken } = require("../utils/SecretToken");
+const jwt = require("jsonwebtoken");
 
-module.exports.Signup = async (req, res, next) => {
+exports.signup = async (req, res) => {
   try {
-    const { email, username, password, createdAt } = req.body;
-    const existingUser = await User.findOne({ email });
-
-    if (existingUser) {
-      return res.json({ message: "User already exists" });
+    const { username, email, password } = req.body;
+    if (!username || !email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
     }
 
-    const newUser = await User.create({ email, username, password, createdAt });
-    const token = createSecretToken(newUser._id);
-    res.cookie("token", token, {
-      httpOnly: true,
-      sameSite: "None",
-      secure: true,
-      maxAge: 24 * 60 * 60 * 1000,
-    });
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ message: "User already exists" });
+    }
 
-    res.status(201).json({
-      message: "User signed in successfully",
-      success: true,
-    });
-    next();
-  } catch (err) {
-    console.error(err);
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ username, email, password: hashedPassword });
+
+    await newUser.save();
+    res.status(201).json({ message: "User registered successfully" });
+  } catch (error) {
+    console.error("Signup error:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
-module.exports.Login = async (req, res, next) => {
+exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      return res.json({ message: "Please enter the details" });
-    }
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.json({ message: "User not found" });
+      return res.status(400).json({ message: "All fields are required" });
     }
 
-    const auth = await bcrypt.compare(password, user.password);
-    if (!auth) {
-      return res.json({ message: "Incorrect password or email" });
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: "Invalid credentials" });
     }
-    const token = createSecretToken(user._id);
-    res.cookie("token", token, {
-      httpOnly: true,
-      sameSite: "None",
-      secure: true,
-      maxAge: 24 * 60 * 60 * 1000,
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
     });
 
     res.status(200).json({
-      message: "User Logged in successfully",
-      success: true,
+      message: "Login successful",
+      token,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+      },
     });
-    next();
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };

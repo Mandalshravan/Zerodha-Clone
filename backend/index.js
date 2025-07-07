@@ -12,49 +12,41 @@ const positionsRoute = require("./routes/PositionRoute");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const uri = process.env.MONGO_URL;
 
-// ✅ Correct CORS setup - NO trailing slash
 app.use(
   cors({
     origin: [
       "https://zerodha-frontend-9dz2.onrender.com",
       "https://zerodha-dashboard-8j1e.onrender.com",
+      "http://localhost:5173", // optional for local test
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
 
+app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(express.json());
 
-// ✅ API Routes
-app.use("/auth", authRoute);
+// ✅ Correct route prefix
+app.use("/api/auth", authRoute);
 app.use("/order", ordersRoute);
 app.use("/holding", holdingsRoute);
 app.use("/position", positionsRoute);
 
-// ✅ Optional: Debug test route to confirm server is live
 app.get("/", (req, res) => {
   res.send("Zerodha backend is working ✅");
 });
 
-// ✅ MongoDB connection
 mongoose
-  .connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(process.env.MONGO_URL)
   .then(() => {
     console.log("✅ MongoDB connected");
+    app.listen(PORT, () =>
+      console.log(`🚀 Server is running on port ${PORT}`)
+    );
   })
   .catch((err) => {
     console.error("❌ MongoDB connection error:", err);
   });
-
-// ✅ Start the server
-app.listen(PORT, () => {
-  console.log(`🚀 Server is running on port ${PORT}`);
-});
