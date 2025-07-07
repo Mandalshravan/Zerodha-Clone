@@ -38,7 +38,7 @@ const Login = () => {
         handleSuccess(response.data.message);
 
         setTimeout(() => {
-          window.location.href = "https://zerodha-frontend-9dz2.onrender.com/dashboard";
+          window.location.href = " https://zerodha-dashboard-8j1e.onrender.com/dashboard";
         }, 2000);
       } else {
         handleError(response.data.message || "Login failed");
